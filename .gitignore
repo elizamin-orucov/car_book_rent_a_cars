@@ -3,4 +3,4 @@
 media/
 manage.py
 db.sqlite3
-password.txt
+media/password.txt
