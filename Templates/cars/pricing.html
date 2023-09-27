@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block body %}
+{% csrf_token %}
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/static/assets/images/bg_3.jpg');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+          <div class="col-md-9 ftco-animate pb-5">
+          	<p class="breadcrumbs"><span class="mr-2"><a href="{% url 'cars:index' %}">ƏSAS SƏHİFƏ <i class="ion-ios-arrow-forward"></i></a></span> <span>QİYMƏTLƏNDİRMƏ <i class="ion-ios-arrow-forward"></i></span></p>
+            <h2 class="mb-3 bread" style="color:white;">Qiymətləndirmə</h2>
+          </div>
+        </div>
+      </div>
+    </section>
+	{% if cars %}
+    <section class="ftco-section ftco-cart">
+			<div class="container">
+				<div class="row">
+    			<div class="col-md-12 ftco-animate">
+    				<div class="car-list">
+	    				<table class="table">
+						    <thead class="thead-primary">
+						      <tr class="text-center">
+						        <th>&nbsp;</th>
+						        <th>&nbsp;</th>
+						        <th class="bg-primary heading">Günlük qiymət</th>
+						        <th class="bg-dark heading">Həftəlik qiymət</th>
+						        <th class="bg-black heading">Aylıq qiymət</th>
+						      </tr>
+						    </thead>
+						    <tbody>
+<!--							for start-->
+							{% for car in cars %}
+						      <tr class="">
+						      	<a><td class="car-image"><div class="img" style="background-image:url({{ car.carsimages_set.last.image.url }});"></div><a onclick="getPricing('{{car.id}}')" style="color:red;"><i class="fa-solid fa-delete-left fa-rotate-180" style="color: #ff0000;"></i>&nbsp;sil</a></td>
+						        <td class="product-name">
+						        	<h3>
+									{% if car.model.parent.parent != None %}
+										<a href="{% url 'cars:detail' car.id %}">{{ car.model.parent.parent }}&nbsp;{{ car.model }} ({{ car.bantype }})</a>
+									{% else %}
+										<a href="{% url 'cars:detail' car.id %}">{{ car.model.parent }}&nbsp;{{ car.model }} ({{ car.bantype }})</a>
+									{% endif %}
+									</h3>
+						        	<span class="subheading">&nbsp;<i class="fa-solid fa-gas-pump"></i>&nbsp;{{ car.fuel.name }}</span><br>
+						        	<span class="subheading"><img width="23" src="/static/images/piston.png/">&nbsp;{{ car.engine|safe }}</span><br>
+						        	<span class="subheading"><img width="20" src="/static/images/gear_box2.png/">&nbsp;{{ car.gearbox.name }}</span>
+						        </td>
+						        
+						        <td class="price">
+						        	<p class="btn-custom"><a href="{% url 'cars:car-order' car.id %}">İndi bron et</a></p>
+						        	<div class="price-rate">
+							        	<h3>
+							        		<span class="num"><small class="currency">&#8380;</small>&nbsp;{{ car.price_to_day }}</span>
+							        		<span class="per">/günlük</span>
+							        	</h3>
+							        	<span class="subheading"></span>
+						        	</div>
+						        </td>
+						        
+						        <td class="price">
+						        	<p class="btn-custom"><a href="{% url 'cars:car-order' car.id %}">İndi bron et</a></p>
+						        	<div class="price-rate">
+							        	<h3>
+							        		<span class="num"><small class="currency">&#8380;</small>&nbsp;{{ car.price_to_week }}</span>
+							        		<span class="per">/həftəlik</span>
+							        	</h3>
+							        	<span class="subheading"></span>
+						        </div>
+						        </td>
+
+						        <td class="price">
+						        	<p class="btn-custom"><a href="{% url 'cars:car-order' car.id %}">İndi bron et</a></p>
+						        	<div class="price-rate">
+							        	<h3>
+							        		<span class="num"><small class="currency">&#8380;</small>&nbsp;{{ car.price_to_month }}</span>
+							        		<span class="per">/aylıq</span>
+							        	</h3>
+							        	<span class="subheading"></span>
+							        </div>
+						        </td>
+						      </tr>
+							  </a>
+							{% endfor %}
+<!--							for end-->
+						    </tbody>
+						  </table>
+					  </div>
+    			</div>
+    		</div>
+			</div>
+		</section>
+	{% else %}
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img width="200" src="/static/wishlist/car-scale.png/">
+	<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Qarşılaşdırmaq istədiyiniz avtomobilləri <i class="fa-solid fa-scale-unbalanced fa-flip" style="color: #005eff;"></i> işarəsinə klik edərək qiymətləndirməyə əlavə edin.</h5>
+	{% endif %}
+
+{% endblock %}
+
+
+{% block js %}
+
+<script>
+	const pricing_url = "{% url 'cars:pricing' %}";
+	function getPricing(id) {
+		console.log(id);
+		var myHeaders2 = new Headers();
+		myHeaders2.append('X-CSRFToken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+		var formData = new FormData();
+		formData.append('id', id);
+		var requestOptions = {
+			method: 'POST',
+			headers: myHeaders2,
+			body: formData,
+			redirect: 'follow',
+		};
+
+		response = fetch(pricing_url, requestOptions)
+			.then(function (response) {
+				if (response.ok) {
+					response.json().then((data) => {
+						if (data.logg) {
+
+							if (data.success) {
+									$("#cars-pricing-" + id).removeClass("fa-solid fa-scale-unbalanced-flip fa-flip").addClass("fa-solid fa-scale-balanced");
+									$("#cars-pricing-text-" + id).text("Əlavə edildi")
+								} else {
+									$("#cars-pricing-" + id).removeClass("fa-solid fa-scale-balanced").addClass("fa-solid fa-scale-unbalanced-flip fa-flip");
+									$("#cars-pricing-text-" + id).text("Qarşılaşdır")
+								}location.reload();
+
+						} else {
+							window.location.href = "/user/login/";
+						}
+					});
+				}
+			});
+	}
+</script>
+
+{% endblock %}

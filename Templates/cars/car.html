@@ -1,0 +1,375 @@
+{% extends 'base.html' %}
+
+
+
+{% block body %}
+<style>
+	/* Move the wishlist icon to the upper-right corner */
+.fa-heart {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 24px;
+  z-index: 9999; /* Ensure the icon appears above other elements */
+}
+
+</style>
+	{% csrf_token %}
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/static/assets/images/bg_3.jpg');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+        </div>
+      </div>
+    </section>
+		<section class="ftco-section ftco-no-pt bg-light">
+         <div class="container">
+    		<div class="row no-gutters">
+    			<div class="col-md-12	featured-top">
+    				<div class="row no-gutters">
+	  					<div class="col-md-12 align-items-center">
+							<form method="GET">
+	  						<div class="services-wrap rounded-right w-100">
+	  							<h3 class="heading-section mb-4">İcarəyə götürməyin daha yaxşı yolu</h3>
+	  							<div class="row d-flex mb-4">
+
+									<div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-100 text-center">
+				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-route"></span></div>
+				              	<div class="text w-100">
+					                <h3 class="heading mb-2">Alma Yerinizi Seçin</h3>
+				                </div>
+					            </div>
+					          </div>
+					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-100 text-center">
+				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-handshake"></span></div>
+				              	<div class="text w-100">
+					                <h3 class="heading mb-2">Ən yaxşı təklifi seçin</h3>
+					              </div>
+					            </div>
+					          </div>
+					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-100 text-center">
+				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-rent"></span></div>
+				              	<div class="text w-100">
+					                <h3 class="heading mb-2">Avtomobilinizi rezerv edin</h3>
+					              </div>
+					            </div>
+					          </div>
+
+					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-50 text-center" id="olcusu">
+				              	<div class="form-group">
+			    					<select class="form-control"  name="year">
+										<option style="color:black;background-color:white;" value="">İl, min.</option>
+										{% for year,year2 in years %}
+										<option style="color:black;background-color:white;" value="{{ year2 }}">{{ year2 }}</option>
+										{% endfor %}
+									</select>
+			    				</div>
+					            </div>
+					          </div>
+							<div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-55 text-center">
+				              	<div class="form-group">
+			    					<select class="form-control"  name="gearbox">
+										<option style="color:black;background-color:white;" value="">Transmissiya</option>
+										{% for gear in gearbox %}
+										<option style="color:black;background-color:white;" value="{{ gear.id }}">{{ gear.name }}</option>
+										{% endfor %}
+									</select>
+			    				</div>
+					            </div>
+					          </div>
+							<div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-50 text-center" id="olcusu3">
+				              	<div class="form-group">
+			    					<select class="form-control" name="bantype">
+										<option style="color:black;background-color:white;" value="">Ban növü</option>
+										{% for ban in bantype %}
+										<option style="color:black;background-color:white;" value="{{ ban.id }}">{{ ban.name }}</option>
+										{% endfor %}
+									</select>
+			    				</div>
+					            </div>
+					          </div>
+							<div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-50 text-center" >
+				              	<div class="form-group">
+			    					<select class="form-control" name="color">
+										<option style="color:black;background-color:white;" value="">Rəng</option>
+										{% for color in colors %}
+										<option style="color:black;background-color:white;" value="{{ color.id }}">{{ color.name }}</option>
+										{% endfor %}
+									</select>
+			    				</div>
+					            </div>
+					          </div>
+							<div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-55 text-center">
+				              	<div class="form-group">
+			    					<select class="form-control" name="fuel">
+										<option style="color:black;background-color:white;" value="">Yanacaq növü</option>
+										{% for fuel in fuels %}
+										<option style="color:black;background-color:white;" value="{{ fuel.id }}">{{ fuel.name }}</option>
+										{% endfor %}
+									</select>
+			    				</div>
+					            </div>
+					          </div>
+							<div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-50 text-center">
+				              	<div class="form-group">
+			    					<select class="form-control" name="gear">
+										<option style="color:black;background-color:white;" value="">Ötürücü</option>
+										<option style="color:black;background-color:white;" value="ön">Ön</option>
+										<option style="color:black;background-color:white;" value="arxa">Arxa</option>
+										<option style="color:black;background-color:white;" value="tam">Tam</option>
+									</select>
+			    				</div>
+					            </div>
+					          </div>
+
+
+							<div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-50 text-center">
+				              	<div class="form-group">
+									<label for="customRange1" class="form-label" style="color:DodgerBlue;">Günlük qiymət</label>
+									<input type="range" min="30" max="700" name="day-price" class="form-range" id="customRange1" value="700">
+								  </div>
+								  <div id="rangeValueDisplay" class="mt-3" style="color:MediumAquaMarine;"></div>
+									<hr><hr>
+					            </div>
+					          </div>
+							<div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-50 text-center">
+				              	<div class="form-group">
+									<label for="customRange1" class="form-label" style="color:DodgerBlue;">Həftəlik qiymət</label>
+									<input type="range" min="170" max="3000" class="form-range" name="week-price" id="customRange2" value="3000">
+								  </div>
+								  <div id="rangeValueDisplay2" class="mt-3" style="color:MediumAquaMarine;"></div>
+									<hr><hr>
+					            </div>
+					          </div>
+							<div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-50 text-center">
+				              	<div class="form-group">
+									<label for="customRange1" class="form-label" style="color:DodgerBlue;">Aylıq qiymət</label>
+									<input type="range" min="700" max="10000" name="month-price" class="form-range" id="customRange3" value="10000">
+								  </div>
+								  <div id="rangeValueDisplay3" class="mt-3" style="color:MediumAquaMarine;"></div>
+									<hr><hr>
+					            </div>
+					          </div>
+
+
+							<div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="container">
+
+				              	<div class="form-group">
+									<input type="checkbox" name="driver" id="driver1" value="True">
+									<label for="driver1" class="form-label" style="color:DodgerBlue;">Sürücü ilə</label>
+								</div>
+					            </div>
+					        </div>
+<!--									elaveler for start-->
+									{% for addt in additional %}
+							<div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="container">
+
+				              	<div class="form-group">
+									<input type="checkbox" name="addtional" id="addt{{ forloop.counter }}" value="{{ addt.id }}">
+									<label for="addt{{ forloop.counter }}" class="form-label" style="color:DodgerBlue;">{{ addt.name }}</label>
+								</div>
+					            </div>
+					          </div>
+									{% endfor %}
+<!--								elaveler for end-->
+					        </div>
+
+
+
+								<div class="h-100 d-flex align-items-center justify-content-center">
+									<div class="form-group">
+									  <input type="submit" value="Axtarış edin" class="btn btn-secondary py-3 px-4">
+									</div>
+								</div>
+                            </div>
+
+							</form>
+                        </div>
+	  				</div>
+				</div>
+
+</div></div>
+    </section>
+
+		<section class="ftco-section bg-light">
+    	<div class="container">
+    		<div class="row">
+<!--				car for start-->
+				{% for car in cars_list %}
+    			<div class="col-md-4">
+    <div class="car-wrap rounded ftco-animate">
+        <div class="img rounded d-flex align-items-end" style="background-image: url({{ car.carsimages_set.last.image.url }});">
+            <a onclick="getWish('{{ car.id }}')">
+                <i class="fa-solid fa-heart" style="{% if request.user in car.wishlist.all %}color: red;{% else %}color: white; {% endif %} font-size: 24px;" id="cars-heart-{{car.id}}"></i>
+            </a>
+        </div>
+        <div class="text">
+            <h2 class="mb-0">{% if car.model.parent.parent == None %}<img width="30" src="{{ car.model.parent.icon.url }}"><a href="{% url 'cars:detail' car.id %}">&nbsp;{{ car.model }}</a>{% else %}<img width="30" src="{{ car.model.parent.parent.icon.url }}"><a href="{% url 'cars:detail' car.id %}">&nbsp;{{ car.model }}</a>{% endif %}</h2>
+            <div class="d-flex mb-3">
+				{% if car.model.parent.parent != None %}
+                <span class="cat">{{ car.model.parent.parent }}</span>
+				{% else %}
+                <span class="cat">{{ car.model.parent }}</span>
+				{% endif %}
+                <p class="price ml-auto">{{ car.price_to_day }} <span>azn/gün</span></p>
+            </div>
+			<p class="d-flex mb-0 d-block"><a href="{% url 'cars:car-order' car.id %}" class="btn btn-primary py-2 mr-1"><i class="fa-solid fa-dollar-sign fa-beat"></i>&nbsp;İndi bron et</a> <a onclick="getPricing('{{ car.id }}')" class="btn btn-secondary py-2 ml-1"><i {% if request.user in car.pricing_list.all %}class="fa-solid fa-scale-balanced"{% else %}class="fa-solid fa-scale-unbalanced-flip fa-flip"{% endif %} id="cars-pricing-{{car.id}}"></i>{% if request.user in car.pricing_list.all %}&nbsp;<span id="cars-pricing-text-{{car.id}}">Əlavə edildi</span>{% else %}&nbsp;<span id="cars-pricing-text-{{car.id}}">Qarşılaşdır</span>{% endif %}</a></p>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<!--    			car for end-->
+    		</div>
+    		<div class="row mt-5">
+          <div class="col text-center">
+            <div class="block-27">
+			{% if paginator.num_pages > 1 %}
+              <ul>
+				  {% if cars_list.has_previous %}
+                	<li><a href="?page={{ cars_list.previous_page_number }}&{% for val in filter_dict %}{{val}}{% endfor %}">&lt;</a></li>
+				  {% endif %}
+
+				  {% for i in cars_list.paginator.page_range %}
+                	<li class="{% if cars_list.number == i %}active{% endif %}"><a href="?page={{i}}&{% for val in filter_dict %}{{val}}{% endfor %}">{{ i }}</a></li>
+				  {% endfor %}
+
+				  {% if cars_list.has_next %}
+                	<li><a href="?page={{ cars_list.next_page_number }}&{% for val in filter_dict %}{{val}}{% endfor %}">&gt;</a></li>
+				  {% endif %}
+              </ul>
+			{% endif %}
+            </div>
+          </div>
+        </div>
+    	</div>
+    </section>
+
+{% endblock %}
+
+
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  const rangeInput = document.getElementById('customRange1');
+  const rangeValueDisplay = document.getElementById('rangeValueDisplay');
+
+  const rangeInput2 = document.getElementById('customRange2');
+  const rangeValueDisplay2 = document.getElementById('rangeValueDisplay2');
+
+  const rangeInput3 = document.getElementById('customRange3');
+  const rangeValueDisplay3 = document.getElementById('rangeValueDisplay3');
+
+  rangeInput.addEventListener('input', function () {
+    rangeValueDisplay.textContent = 'max: ' + rangeInput.value + ' azn';
+  });
+
+  rangeInput2.addEventListener('input', function () {
+    rangeValueDisplay2.textContent = 'max: ' + rangeInput2.value + ' azn';
+  });
+
+  rangeInput3.addEventListener('input', function () {
+    rangeValueDisplay3.textContent = 'max: ' + rangeInput3.value + ' azn';
+  });
+
+
+  rangeValueDisplay.textContent = 'max: ' + rangeInput.value + ' azn';
+  rangeValueDisplay2.textContent = 'max: ' + rangeInput2.value + ' azn';
+  rangeValueDisplay3.textContent = 'max: ' + rangeInput3.value + ' azn';
+</script>
+
+
+<script>
+	const wish_url = "{% url 'cars:wish' %}"
+
+	function getWish(id) {
+		console.log(id)
+		var myHeaders = new Headers()
+				myHeaders.append('X-CSRFToken', document.querySelector('[name=csrfmiddlewaretoken]').value)
+				var formData = new FormData()
+
+				formData.append('id', id)
+
+				var requestOptions = {
+					method: 'POST',
+					headers: myHeaders,
+					body: formData,
+					redirect: 'follow',
+				};
+
+				response = fetch(wish_url, requestOptions)
+					.then(function (response) {
+
+						if (response.ok) {
+							response.json().then((data) => {
+							if(data.logg){
+
+								if(data.success){
+									$("#cars-heart-"+id).css('color', 'red')
+								}else{
+									$("#cars-heart-"+id).css('color', 'white')
+								}}else{
+								window.location.href="/user/login/"
+								}
+							})
+						}
+					})
+	}
+
+
+	const pricing_url = "{% url 'cars:pricing' %}";
+	function getPricing(id) {
+		console.log(id);
+		var myHeaders2 = new Headers();
+		myHeaders2.append('X-CSRFToken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+		var formData = new FormData();
+		formData.append('id', id);
+		var requestOptions = {
+			method: 'POST',
+			headers: myHeaders2,
+			body: formData,
+			redirect: 'follow',
+		};
+
+		response = fetch(pricing_url, requestOptions)
+			.then(function (response) {
+				if (response.ok) {
+					response.json().then((data) => {
+						if (data.logg) {
+
+							if (data.success) {
+									$("#cars-pricing-" + id).removeClass("fa-solid fa-scale-unbalanced-flip fa-flip").addClass("fa-solid fa-scale-balanced");
+									$("#cars-pricing-text-" + id).text("Əlavə edildi")
+								} else {
+									$("#cars-pricing-" + id).removeClass("fa-solid fa-scale-balanced").addClass("fa-solid fa-scale-unbalanced-flip fa-flip");
+									$("#cars-pricing-text-" + id).text("Qarşılaşdır")
+								}
+
+						} else {
+							window.location.href = "/user/login/";
+						}
+					});
+				}
+			});
+	}
+
+
+
+</script>
+
+{% endblock %}

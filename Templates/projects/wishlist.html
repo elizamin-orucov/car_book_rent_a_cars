@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+
+
+{% block body %}
+<style>
+.fa-heart {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 24px;
+  z-index: 9999;
+}
+
+</style>
+
+
+
+<!--    start cars-->
+
+	{% csrf_token %}
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/static/assets/images/bg_3.jpg');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+        </div>
+      </div>
+    </section>
+		<section class="ftco-section ftco-no-pt bg-light">
+         <div class="container">
+    		<div class="row no-gutters">
+
+</div></div>
+    </section>
+{% if cars_list %}
+<h1 style="color:DodgerBlue;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Seçilmişlər</h1>
+{% else %}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img width="200" src="/static/wishlist/706478.png/">
+<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-heart color-danger" style="color:red;" aria-hidden="true"></i>&nbsp;Bəyəndiyiniz elanları ürək işarəsinə klik edərək seçilmişlərə əlavə edin.</h5>
+{% endif %}
+		<section class="ftco-section bg-light">
+    	<div class="container">
+    		<div class="row">
+<!--				car for start-->
+				{% for car in cars_list %}
+    			<div class="col-md-4">
+    <div class="car-wrap rounded ftco-animate">
+        <div class="img rounded d-flex align-items-end" style="background-image: url({{ car.carsimages_set.last.image.url }});">
+            <a onclick="getWish('{{ car.id }}')">
+                <i class="fa-solid fa-heart" style="{% if request.user in car.wishlist.all %}color: red;{% else %}color: white; {% endif %} font-size: 24px;" id="cars-heart-{{car.id}}"></i>
+            </a>
+        </div>
+        <div class="text">
+            <h2 class="mb-0">{% if car.model.parent.parent == None %}<img width="30" src="{{ car.model.parent.icon.url }}"><a href="{% url 'cars:detail' car.id %}">&nbsp;{{ car.model }}</a>{% else %}<img width="30" src="{{ car.model.parent.parent.icon.url }}"><a href="{% url 'cars:detail' car.id %}">&nbsp;{{ car.model }}</a>{% endif %}</h2>
+            <div class="d-flex mb-3">
+				{% if car.model.parent.parent != None %}
+                <span class="cat">{{ car.model.parent.parent }}</span>
+				{% else %}
+                <span class="cat">{{ car.model.parent }}</span>
+				{% endif %}
+                <p class="price ml-auto">{{ car.price_to_day }} <span>azn/gün</span></p>
+            </div>
+			<p class="d-flex mb-0 d-block"><a href="{% url 'cars:car-order' car.id %}" class="btn btn-primary py-2 mr-1"><i class="fa-solid fa-dollar-sign fa-beat"></i>&nbsp;İndi bron et</a> <a onclick="getPricing('{{ car.id }}')" class="btn btn-secondary py-2 ml-1"><i {% if request.user in car.pricing_list.all %}class="fa-solid fa-scale-balanced"{% else %}class="fa-solid fa-scale-unbalanced-flip fa-flip"{% endif %} id="cars-pricing-{{car.id}}"></i>{% if request.user in car.pricing_list.all %}&nbsp;<span id="cars-pricing-text-{{car.id}}">Əlavə edildi</span>{% else %}&nbsp;<span id="cars-pricing-text-{{car.id}}">Qarşılaşdır</span>{% endif %}</a></p>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<!--    			car for end-->
+    		</div>
+    		<div class="row mt-5">
+          <div class="col text-center">
+            <div class="block-27">
+			{% if paginator.num_pages > 1 %}
+              <ul>
+				  {% if cars_list.has_previous %}
+                	<li><a href="?page={{ cars_list.previous_page_number }}&{% for val in filter_dict %}{{val}}{% endfor %}">&lt;</a></li>
+				  {% endif %}
+
+				  {% for i in cars_list.paginator.page_range %}
+                	<li class="{% if cars_list.number == i %}active{% endif %}"><a href="?page={{i}}&{% for val in filter_dict %}{{val}}{% endfor %}">{{ i }}</a></li>
+				  {% endfor %}
+
+				  {% if cars_list.has_next %}
+                	<li><a href="?page={{ cars_list.next_page_number }}&{% for val in filter_dict %}{{val}}{% endfor %}">&gt;</a></li>
+				  {% endif %}
+              </ul>
+			{% endif %}
+            </div>
+          </div>
+        </div>
+    	</div>
+    </section>
+
+{% endblock %}
+
+
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+<script>
+	const wish_url = "{% url 'cars:wish' %}"
+
+	function getWish(id) {
+		console.log(id)
+		var myHeaders = new Headers()
+				myHeaders.append('X-CSRFToken', document.querySelector('[name=csrfmiddlewaretoken]').value)
+				var formData = new FormData()
+
+				formData.append('id', id)
+
+				var requestOptions = {
+					method: 'POST',
+					headers: myHeaders,
+					body: formData,
+					redirect: 'follow',
+				};
+
+				response = fetch(wish_url, requestOptions)
+					.then(function (response) {
+
+						if (response.ok) {
+							response.json().then((data) => {
+							if(data.logg){
+
+								if(data.success){
+									$("#cars-heart-"+id).css('color', 'red')
+								}else{
+									$("#cars-heart-"+id).css('color', 'white')
+								}location.reload();}else{
+								}
+							})
+						}
+					})
+	}
+
+
+	const pricing_url = "{% url 'cars:pricing' %}";
+	function getPricing(id) {
+		console.log(id);
+		var myHeaders2 = new Headers();
+		myHeaders2.append('X-CSRFToken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+		var formData = new FormData();
+		formData.append('id', id);
+		var requestOptions = {
+			method: 'POST',
+			headers: myHeaders2,
+			body: formData,
+			redirect: 'follow',
+		};
+
+		response = fetch(pricing_url, requestOptions)
+			.then(function (response) {
+				if (response.ok) {
+					response.json().then((data) => {
+						if (data.logg) {
+
+							if (data.success) {
+									$("#cars-pricing-" + id).removeClass("fa-solid fa-scale-unbalanced-flip fa-flip").addClass("fa-solid fa-scale-balanced");
+									$("#cars-pricing-text-" + id).text("Əlavə edildi")
+								} else {
+									$("#cars-pricing-" + id).removeClass("fa-solid fa-scale-balanced").addClass("fa-solid fa-scale-unbalanced-flip fa-flip");
+									$("#cars-pricing-text-" + id).text("Qarşılaşdır")
+								}
+
+						} else {
+							window.location.href = "/user/login/";
+						}
+					});
+				}
+			});
+	}
+
+
+
+</script>
+
+{% endblock %}

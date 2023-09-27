@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<style>
+  #vacancy-name {
+    text-align: center;
+    margin-bottom: 20px;
+    /* Diğer stilleri buraya ekleyebilirsiniz */
+  }
+</style>
+
+
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/static/assets/images/bg_3.jpg');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+          <div class="col-md-9 ftco-animate pb-5">
+          	<p class="breadcrumbs"><span class="mr-2"><a href="{% url 'cars:index' %}">Əsas səhifə <i class="ion-ios-arrow-forward"></i></a></span> <span class="mr-2"><a href="{% url 'cars:vacancy' %}">Vakansiyalar <i class="ion-ios-arrow-forward"></i></a></span>
+            <h1 class="mb-3 bread">Vakansiya</h1>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ftco-section ftco-degree-bg">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 ftco-animate">
+            <h1 id="vacancy-name">Vakansiya:&nbsp;{{ vacancy.name }}</h1>
+            <h2 class="mb-3">İş haqqında</h2>
+            <span style="color:black;">{{ vacancy.obligations|safe }}</span>
+            <hr>
+            {% if vacancy.salary %}
+            <h6 style="color:black">Maaş:&nbsp;{{ vacancy.salary }}<small style="color:DodgerBlue;">&#8380;</small></h6>
+            {% else %}
+            <h6 style="color:black">Maaş:&nbsp;Razilaşma yolu ilə</h6>
+            {% endif %}
+            <h6 style="color:black">İş qrafiki:&nbsp;{{ vacancy.working_conditions }}</h6>
+            <h2 class="mb-3 mt-5">Namizəddən tələblər</h2>
+            <span style="color:black;">{{ vacancy.requirments|safe }}</span>
+            <div class="pt-5 mt-5">
+
+              <div class="comment-form-wrap pt-5">
+                <h3 class="mb-5">Müraciət et</h3>
+                <form method="POST" class="p-5 bg-light" enctype="multipart/form-data">
+                  {% csrf_token %}
+
+                  {% if form.cv.errors %}
+                        {% for error in form.cv.errors %}
+                            <li  style="color:DodgerBlue;"><span>{{ error|escape }}</span></li>
+                        {% endfor %}
+                  {% endif %}
+                  {% if form.full_name.errors %}
+                        {% for error in form.full_name.errors %}
+                            <li  style="color:DodgerBlue;"><span>{{ error|escape }}</span></li>
+                        {% endfor %}
+                  {% endif %}
+
+                  {% for field in form %}
+                  <div class="form-group">
+                    {{ field }}
+                  </div>
+                  {% endfor %}
+                  <div class="form-group">
+                    <input type="submit" value="Müraciət et" class="btn py-3 px-4 btn-primary">
+                  </div>
+
+                </form>
+              </div>
+            </div>
+
+          </div> <!-- .col-md-8 -->
+          <div class="col-md-4 sidebar ftco-animate">
+            <div class="sidebar-box ftco-animate">
+              <div class="categories">
+                {% if vacancies %}
+                <h3>Digər vakansiyalar</h3>
+                {% for i in vacancies %}
+                <li><a href="{% url 'cars:vacancy-detail' i.id %}" style="color:DodgerBlue;"><i class="fa-solid fa-caret-right fa-beat-fade" style="color: #00b3ff;"></i>&nbsp;{{ i }}</a></li>
+                {% endfor %}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section> <!-- .section -->
+
+{% endblock %}

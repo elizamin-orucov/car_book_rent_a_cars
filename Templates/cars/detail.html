@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<style>
+    .center-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>
+
+{% csrf_token %}
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/static/assets/images/bg_3.jpg');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+          <div class="col-md-9 ftco-animate pb-5">
+          	<p class="breadcrumbs"><span class="mr-2"><a href="{% url 'cars:index' %}">Əsas səhifə <i class="ion-ios-arrow-forward"></i></a></span> <span style="color:DodgerBlue;">Avtomobil haqqında <i style="color:DodgerBlue;" class="ion-ios-arrow-forward"></i></span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+	<section class="ftco-section ftco-car-details">
+      <div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="car-details">
+        <a onclick="getPricing('{{ car.id }}')" class="car-scale-icon" id="scale">
+        <i {% if request.user in car.pricing_list.all %}class="fa-solid fa-scale-balanced fa-xl"{% else %}class="fa-solid fa-scale-unbalanced-flip fa-flip fa-xl"{% endif %} style="color: #ffffff; position: absolute; top: 13px; left: 10px;" id="cars-pricing-{{car.id}}"></i>
+		</a>
+        <div class="img rounded" style="background-image: url({{ car.carsimages_set.last.image.url }});"></div>
+        <a onclick="getWish('{{ car.id }}')" style="position: absolute; top: 10px; right: 10px;">
+          <i style="{% if request.user in car.wishlist.all %}color: red;{% else %}color: white; {% endif %}" class="fa-solid fa-heart fa-2x" id="cars-heart-{{car.id}}"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </a>
+        <div class="text text-center">
+          <h2 class="mb-0">
+            {% if car.model.parent.parent == None %}
+            <img width="30" src="{{ car.model.parent.icon.url }}">&nbsp;{{ car.model.parent }}&nbsp;- {{ car.model }}
+            {% else %}
+            <img width="30" src="{{ car.model.parent.parent.icon.url }}">&nbsp;{{ car.model.parent.parent }}&nbsp;- {{ car.model }}
+            {% endif %}
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+          <div class="row">
+      		<div class="col-md d-flex align-self-stretch ftco-animate">
+            <div class="media block-6 services">
+              <div class="media-body py-md-4">
+              	<div class="d-flex mb-3 align-items-center">
+                    <div class="icon d-flex align-items-center justify-content-center"><i class="fa-solid fa-clock-rotate-left fa-2xl" style="color: #006eff;"></i></div>
+	              	<div class="text">
+		                <h3 class="heading mb-0 pl-3">
+		                	Günlük
+		                	<span style="color:black;">{{ car.price_to_day }}&nbsp;&#8380;</span>
+		                </h3>
+	                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md d-flex align-self-stretch ftco-animate">
+            <div class="media block-6 services">
+              <div class="media-body py-md-4">
+              	<div class="d-flex mb-3 align-items-center">
+                    <div class="icon d-flex align-items-center justify-content-center"><img width="60" src="/static/images/week-7-24.jpg/"></div>
+	              	<div class="text">
+		                <h3 class="heading mb-0 pl-3">
+		                	Həftəlik
+                            <span style="color:DodgerBlue;">{{ car.price_to_week }}&nbsp;&#8380;</span>
+		                </h3>
+	                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md d-flex align-self-stretch ftco-animate">
+            <div class="media block-6 services">
+              <div class="media-body py-md-4">
+              	<div class="d-flex mb-3 align-items-center">
+	              	<div class="icon d-flex align-items-center justify-content-center"><i class="fa-solid fa-calendar-check fa-2xl" style="color: #006eff;"></i></div>
+	              	<div class="text">
+		                <h3 class="heading mb-0 pl-3">
+		                	Aylıq
+		                	<span>{{ car.price_to_month }}&nbsp;&#8380;</span>
+		                </h3>
+	                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      	</div>
+      </div>
+        <div class="text-center">
+                    <a href="{% url 'cars:car-order' car.id %}" class="btn btn-primary py-2 mx-auto"  id="selo"><i class="fa-solid fa-dollar-sign fa-beat"></i>&nbsp;İndi bron et</a>
+        </div>
+        <div class="row">
+      		<div class="col-md-12 pills">
+						<div class="bd-example bd-example-tabs">
+							<div class="d-flex justify-content-center">
+							  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+
+							    <li class="nav-item">
+							      <a class="nav-link active" id="pills-description-tab" data-toggle="pill" href="#pills-description" role="tab" aria-controls="pills-description" aria-expanded="true">Əlavə avadanliqlar</a>
+							    </li>
+                                  {% if car.description %}
+							    <li class="nav-item">
+							      <a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill" href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer" aria-expanded="true">Sifariş şərtləti</a>
+							    </li>
+                                  {% endif %}
+							    <li class="nav-item">
+							      <a class="nav-link" id="pills-review-tab" data-toggle="pill" href="#pills-review" role="tab" aria-controls="pills-review" aria-expanded="true">Avtomobilin göztəriciləri</a>
+							    </li>
+							  </ul>
+							</div>
+
+						  <div class="tab-content" id="pills-tabContent">
+						    <div class="tab-pane fade show active" id="pills-description" role="tabpanel" aria-labelledby="pills-description-tab">
+						    	<div class="row">
+                                    {% for i in addtionals %}
+						    		<div class="col-md-4">
+						    			<ul class="features">
+                                            {% if i in car.additional.all %}
+						    				<li class="check"><span class="ion-ios-checkmark"></span>{{i}}</li>
+                                            {% else %}
+                                            <li class="remove"><span class="ion-ios-close"></span>{{i}}</li>
+                                            {% endif %}
+						    			</ul>
+						    		</div>
+                                    {% endfor %}
+						    	</div>
+						    </div>
+                              {% if car.description %}
+						    <div class="tab-pane fade" id="pills-manufacturer" role="tabpanel" aria-labelledby="pills-manufacturer-tab">
+                                <span style="color:black;">{{ car.description|safe }}</span>
+						    </div><hr>
+                              {% endif %}
+
+						    <div class="tab-pane fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab">
+						      <div class="row">
+							   		<div class="col-md-4">
+                                        <span style="color:black"><i class="fa-solid fa-play fa-2xs"></i>&nbsp;Model:&nbsp;{{ car.year }}</span>
+							   		</div>
+                                    <div class="col-md-4">
+                                        <span style="color:black"><i class="fa-solid fa-play fa-2xs"></i>&nbsp;Mühərrik:&nbsp;{{ car.engine|safe }}</span>
+							   		</div>
+                                    <div class="col-md-4">
+                                        <span style="color:black"><i class="fa-solid fa-play fa-2xs"></i>&nbsp;Rəng:&nbsp;{{ car.color }}</span>
+							   		</div>
+                                    <div class="col-md-4">
+                                        <span style="color:black"><i class="fa-solid fa-play fa-2xs"></i>&nbsp;Transmissiya:&nbsp;{{ car.gearbox }}</span>
+							   		</div>
+                                    <div class="col-md-4">
+                                        <span style="color:black"><i class="fa-solid fa-play fa-2xs"></i>&nbsp;Oturacaq sayı:&nbsp;{{ car.seats_count }}</span>
+							   		</div>
+                                    <div class="col-md-4">
+                                        <span style="color:black"><i class="fa-solid fa-play fa-2xs"></i>&nbsp;Ötürücü:&nbsp;{{ car.transmitter }}</span>
+							   		</div>
+                                    <div class="col-md-4">
+                                        <span style="color:black"><i class="fa-solid fa-play fa-2xs"></i>&nbsp;Yanacaq:&nbsp;{{ car.fuel }}</span>
+							   		</div>
+                                    <div class="col-md-4">
+                                        <span style="color:black"><i class="fa-solid fa-play fa-2xs"></i>&nbsp;Ban:&nbsp;{{ car.bantype.name }}</span>
+							   		</div>
+							   	</div>
+						    </div>
+						  </div>
+						</div>
+            </div></div>
+    </section>
+    <section class="ftco-section ftco-no-pt">
+    	<div class="container">
+    		<div class="row justify-content-center">
+          <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+          	<span class="subheading">Avtomobil seçin</span>
+            <h2 class="mb-2">Digər avtomobillər</h2>
+          </div>
+        </div>
+        <div class="row">
+    {% for car1 in cars_list %}
+        <div class="col-md-4">
+            <div class="car-wrap rounded ftco-animate">
+                <div class="img rounded d-flex align-items-end" style="background-image: url({{ car1.carsimages_set.last.image.url }});">
+                    <a onclick="getWish('{{ car1.id }}')" class="wishlist-icon">
+                        <i class="fa-solid fa-heart" style="{% if request.user in car1.wishlist.all %}color: red;{% else %}color: white; {% endif %} font-size: 24px;" id="cars-heart-{{car1.id}}"></i>
+                    </a>
+                </div>
+                <div class="text">
+                    <h2 class="mb-0">{% if car1.model.parent.parent == None %}<img width="30" src="{{ car1.model.parent.icon.url }}"><a href="{% url 'cars:detail' car1.id %}">&nbsp;{{ car1.model }}</a>{% else %}<img width="30" src="{{ car1.model.parent.parent.icon.url }}"><a href="{% url 'cars:detail' car1.id %}">&nbsp;{{ car1.model }}</a>{% endif %}</h2>
+                    <div class="d-flex mb-3">
+                        {% if car1.model.parent.parent != None %}
+                        <span class="cat">{{ car1.model.parent.parent }}</span>
+                        {% else %}
+                        <span class="cat">{{ car1.model.parent }}</span>
+                        {% endif %}
+                        <p class="price ml-auto">{{ car1.price_to_day }} <span>azn/gün</span></p>
+                    </div>
+                    <p class="d-flex mb-0 d-block"><a href="{% url 'cars:car-order' car1.id %}" class="btn btn-primary py-2 mr-1"><i class="fa-solid fa-dollar-sign fa-beat"></i>&nbsp;İndi bron et</a> <a onclick="getPricing('{{ car1.id }}')" class="btn btn-secondary py-2 ml-1"><i {% if request.user in car1.pricing_list.all %}class="fa-solid fa-scale-balanced"{% else %}class="fa-solid fa-scale-unbalanced-flip fa-flip"{% endif %} id="cars-pricing-{{car1.id}}"></i>{% if request.user in car1.pricing_list.all %}&nbsp;<span id="cars-pricing-text-{{car1.id}}">Əlavə edildi</span>{% else %}&nbsp;<span id="cars-pricing-text-{{car1.id}}">Qarşılaşdır</span>{% endif %}</a></p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<style>
+    .wishlist-icon {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+	.car-scale-icon {
+        position: absolute;
+        top: 10px;
+        right: 120px;
+    }
+
+
+</style>
+
+    	</div>
+    </section>
+
+
+
+{% endblock %}
+
+{% block js %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+	const wish_url = "{% url 'cars:wish' %}"
+
+	function getWish(id) {
+		console.log(id)
+		var myHeaders = new Headers()
+				myHeaders.append('X-CSRFToken', document.querySelector('[name=csrfmiddlewaretoken]').value)
+				var formData = new FormData()
+
+				formData.append('id', id)
+
+				var requestOptions = {
+					method: 'POST',
+					headers: myHeaders,
+					body: formData,
+					redirect: 'follow',
+				};
+
+				response = fetch(wish_url, requestOptions)
+					.then(function (response) {
+
+						if (response.ok) {
+							response.json().then((data) => {
+							if(data.logg){
+
+								if(data.success){
+									$("#cars-heart-"+id).css('color', 'red')
+								}else{
+									$("#cars-heart-"+id).css('color', 'white')
+								}}else{
+								window.location.href="/user/login/"
+								}
+							})
+						}
+					})
+	}
+
+
+	const pricing_url = "{% url 'cars:pricing' %}";
+	function getPricing(id) {
+		console.log(id);
+		var myHeaders2 = new Headers();
+		myHeaders2.append('X-CSRFToken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+		var formData = new FormData();
+		formData.append('id', id);
+		var requestOptions = {
+			method: 'POST',
+			headers: myHeaders2,
+			body: formData,
+			redirect: 'follow',
+		};
+
+		response = fetch(pricing_url, requestOptions)
+			.then(function (response) {
+				if (response.ok) {
+					response.json().then((data) => {
+						if (data.logg) {
+
+							if (data.success) {
+									$("#cars-pricing-" + id).removeClass("fa-solid fa-scale-unbalanced-flip fa-flip").addClass("fa-solid fa-scale-balanced");
+									$("#cars-pricing-text-" + id).text("Əlavə edildi")
+								} else {
+									$("#cars-pricing-" + id).removeClass("fa-solid fa-scale-balanced").addClass("fa-solid fa-scale-unbalanced-flip fa-flip");
+									$("#cars-pricing-text-" + id).text("Qarşılaşdır")
+								}
+
+						} else {
+							window.location.href = "/user/login/";
+						}
+					});
+				}
+			});
+	}
+
+
+
+</script>
+{% endblock %}

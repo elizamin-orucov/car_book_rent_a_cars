@@ -1,0 +1,383 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+<style>
+    #category {
+        width: 30px;
+    }
+    #title-container {
+        display: flex;
+        align-items: center;
+    }
+
+    #category,
+    #car-model {
+        margin-right: 10px;
+    }
+</style>
+    <!-- END nav -->
+
+    <div class="hero-wrap ftco-degree-bg" style="background-image: url('/static/assets/images/bg_1.jpg');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text justify-content-start align-items-center justify-content-center">
+          <div class="col-lg-8 ftco-animate">
+          	<div class="text w-100 text-center mb-md-5 pb-md-5">
+	            <h1 class="mb-4">Avtomobil İcarəyə götürməyin sürətli və asan yolu</h1>
+	            <p style="font-size: 18px;">CarBook</p>
+	            <a href="https://vimeo.com/262981018" class="icon-wrap popup-vimeo d-flex align-items-center mt-4 justify-content-center">
+	            	<div class="icon d-flex align-items-center justify-content-center">
+	            		<span class="ion-ios-play"></span>
+	            	</div>
+	            	<div class="heading-title ml-5">
+		            	<span>Avtomobil kirayəsi üçün asan addımlar</span>
+	            	</div>
+	            </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <section class="ftco-section ftco-no-pt bg-light">
+         <div class="container">
+    		<div class="row no-gutters">
+    			<div class="col-md-12	featured-top">
+    				<div class="row no-gutters">
+	  					<div class="col-md-4 d-flex align-items-center">
+	  						<form method="POST" class="request-form ftco-animate bg-primary">
+                                {% csrf_token %}
+		          		        <h2>Sürətli sifariş</h2>
+			    				<div class="form-group">
+			    					<label for="" class="label">SİZ MƏLUMATLARI DAXİL EDİN BİZ ƏLAQƏ SAXLAYAQ</label>
+			    					{{ form.full_name }}
+			    				</div>
+			    				<div class="form-group">
+                                    <label for="" class="label">TƏHFİL ALMA YERİ</label>
+			    					<select class="form-control" name="location">
+                                        <option value="İcarə məntəqəsi" style="color:white;background-color:DodgerBlue;">İcarə məntəqəsi</option>
+                                        <option value="Heyder Aliyev Beynelxalq Airoportu" style="color:white;background-color:DodgerBlue;">Heyder Aliyev Beynelxalq Airoportu</option>
+                                    </select>
+			    				</div>
+			    				<div class="d-flex">
+			    					<div class="form-group mr-2">
+			                <label for="" class="label">SİFARİŞ TARİXİ</label>
+                            <input type="datetime-local" id="datetime" class="form-control" placeholder="Tarix" name="pickup-date" required>
+			              </div>
+			              <div class="form-group ml-2">
+			                <label for="" class="label">Sürücülük</label>
+			                {{ form.driver_license }}
+			              </div>
+		              </div>
+		              <div class="form-group">
+		                <label for="" class="label">ƏLAQƏ TELEFONU</label>
+		                {{ form.mobile }}
+		              </div>
+			            <div class="form-group">
+			              <input type="submit" value="Təsdiq edin" class="btn btn-secondary py-3 px-4">
+			            </div>
+			    			</form>
+	  					</div>
+	  					<div class="col-md-8 d-flex align-items-center">
+	  						<div class="services-wrap rounded-right w-100">
+	  							<h3 class="heading-section mb-4">Mükəmməl Avtomobilinizi Seçin</h3>
+	  							<div class="row d-flex mb-4">
+					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-100 text-center">
+				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-route"></span></div>
+				              	<div class="text w-100">
+					                <h3 class="heading mb-2">Alma Yerinizi Seçin</h3>
+				                </div>
+					            </div>
+					          </div>
+					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-100 text-center">
+				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-handshake"></span></div>
+				              	<div class="text w-100">
+					                <h3 class="heading mb-2">Ən yaxşı təklifi seçin</h3>
+					              </div>
+					            </div>
+					          </div>
+					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+					            <div class="services w-100 text-center">
+				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-rent"></span></div>
+				              	<div class="text w-100">
+					                <h3 class="heading mb-2">Avtomobilinizi rezerv edin</h3>
+					              </div>
+					            </div>
+					          </div>
+					        </div>
+					        <p><a href="{% url 'cars:car-list' %}" class="btn btn-primary py-3 px-4">İndi rezerv edin</a></p>
+                            </div>
+                        </div>
+	  				</div>
+				</div>
+            
+</div></div>
+    </section>
+
+
+    <section class="ftco-section ftco-no-pt bg-light">
+        <div class="container">
+    		<div class="row justify-content-center">
+          <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+          	<span class="subheading">Avtomobillərə</span>
+            <h2 class="mb-2">Ön baxış</h2>
+          </div>
+        </div>
+    		<div class="row">
+    			<div class="col-md-12">
+    				<div class="carousel-car owl-carousel">
+<!--                        for baslangic car-->
+                        {% for car in cars %}
+    					<div class="item">
+                            <div class="car-wrap rounded ftco-animate">
+                                <div class="img rounded d-flex align-items-end" style="background-image: url({{ car.carsimages_set.last.image.url }});">
+                                </div>
+                                <div class="text">
+
+                                    <div class="d-flex mb-0" id="title-container">
+                                        {% if car.model.parent.parent == None %}
+                                        <img width="30" src="{{ car.model.parent.icon.url }}" id="category">
+                                        <a href="{% url 'cars:detail' car.id %}" id="car-model">{{ car.model }}</a>
+                                        {% else %}
+                                        <img width="30" src="{{ car.model.parent.parent.icon.url }}" id="category">
+                                        <a href="{% url 'cars:detail' car.id %}" id="car-model">{{ car.model }}</a>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="d-flex mb-3">
+                                        {% if car.model.parent.parent != None %}
+                                        <span class="cat">{{ car.model.parent.parent }}</span>
+                                        {% else %}
+                                        <span class="cat">{{ car.model.parent }}</span>
+                                        {% endif %}
+                                        <p class="price ml-auto">{{car.price_to_day}}<span style="color:DodgerBlue;"> &#8380;/gün</span></p>
+                                    </div>
+                                    <p class="d-flex mb-0 d-block text-center" id="yeni">
+                                        <a href="{% url 'cars:car-order' car.id %}" class="btn btn-primary py-2 mx-auto"><i class="fa-solid fa-dollar-sign fa-beat"></i>&nbsp;İndi bron et</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+<!--                        for end car -->
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    </section>
+
+    <section class="ftco-section ftco-about">
+			<div class="container">
+				<div class="row no-gutters">
+					<div class="col-md-6 p-md-5 img img-2 d-flex justify-content-center align-items-center" style="background-image: url(/static/images/rentacar-2.png);">
+					</div>
+					<div class="col-md-6 wrap-about ftco-animate">
+	          <div class="heading-section heading-section-white pl-md-5">
+	          	<span class="subheading">Haqqımızda</span>
+	            <h2 class="mb-4">Xoş Gəlmişsiniz</h2>
+
+	            <p>Biz müştərilərimizin səyahət və xoş günlərini rahat keçirməsi üçün xidmət göstəririk.</p>
+	            <p></p>
+                  <p></p>
+	            <p><a href="{% url 'cars:car-list' %}" class="btn btn-primary py-3 px-4">Avtomobilərə bax</a></p>
+	          </div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="ftco-section">
+			<div class="container">
+				<div class="row justify-content-center mb-5">
+          <div class="col-md-7 text-center heading-section ftco-animate">
+          	<span class="subheading">Servislərimiz</span>
+            <h2 class="mb-3">Təklif edirik</h2>
+          </div>
+        </div>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="services services-2 w-100 text-center">
+            	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-wedding-car"></span></div>
+            	<div class="text w-100">
+                <h3 class="heading mb-2">Korteclərin təşkili</h3>
+                <p></p>
+              </div>
+            </div>
+					</div>
+					<div class="col-md-3">
+						<div class="services services-2 w-100 text-center">
+            	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-transportation"></span></div>
+            	<div class="text w-100">
+                <h3 class="heading mb-2">Səyahətlər üçün avtomobil</h3>
+                <p></p>
+              </div>
+            </div>
+					</div>
+					<div class="col-md-3">
+						<div class="services services-2 w-100 text-center">
+            	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-car"></span></div>
+            	<div class="text w-100">
+                <h3 class="heading mb-2">Aeroporta təhvil</h3>
+                <p></p>
+              </div>
+            </div>
+					</div>
+					<div class="col-md-3">
+						<div class="services services-2 w-100 text-center">
+            	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-transportation"></span></div>
+            	<div class="text w-100">
+                <h3 class="heading mb-2">Biznes turlarının təşkili</h3>
+                <p></p>
+              </div>
+            </div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="ftco-section ftco-intro" style="background-image: url(/static/assets/images/bg_3.jpg);">
+			<div class="overlay"></div>
+			<div class="container">
+				<div class="row justify-content-end">
+					<div class="col-md-6 heading-section heading-section-white ftco-animate">
+            <h2 class="mb-3">Bizimlə Qazanmaq İstəyirsiniz? Odur ki, Gecikmə.</h2>
+            <a href="{% url 'cars:vacancy' %}" class="btn btn-primary btn-lg">Vakansiyalara bax</a>
+          </div>
+				</div>
+			</div>
+
+		</section>
+
+
+    <section class="ftco-section testimony-section bg-light">
+      <div class="container">
+        <div class="row justify-content-center mb-5">
+          <div class="col-md-7 text-center heading-section ftco-animate">
+            <h2 class="mb-3">Pozitiv Kollektivimiz</h2>
+          </div>
+        </div>
+        <div class="row ftco-animate">
+          <div class="col-md-12">
+            <div class="carousel-testimony owl-carousel ftco-owl">
+              <div class="item">
+                <div class="testimony-wrap rounded text-center py-4 pb-5">
+                  <div class="user-img mb-2" style="background-image: url(/static/assets/images/person_1.jpg)">
+                  </div>
+                  <div class="text pt-4">
+                    <p class="mb-4"></p>
+                    <p class="name">Vasif Həsənov</p>
+                    <span class="position">Sürücü</span>
+                  </div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="testimony-wrap rounded text-center py-4 pb-5">
+                  <div class="user-img mb-2" style="background-image: url(/static/assets/images/person_2.jpg)">
+                  </div>
+                  <div class="text pt-4">
+                    <p class="mb-4"></p>
+                    <p class="name">Əhməd Rüstəmov</p>
+                    <span class="position">Sürücü</span>
+                  </div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="testimony-wrap rounded text-center py-4 pb-5">
+                  <div class="user-img mb-2" style="background-image: url(/static/assets/images/person_3.jpg)">
+                  </div>
+                  <div class="text pt-4">
+                    <p class="mb-4"></p>
+                    <p class="name">Həsən Əliyev</p>
+                    <span class="position">Mühasib</span>
+                  </div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="testimony-wrap rounded text-center py-4 pb-5">
+                  <div class="user-img mb-2" style="background-image: url(/static/images/developer.jpeg)">
+                  </div>
+                  <div class="text pt-4">
+                    <p class="mb-4"></p>
+                    <p class="name">Nəzrin Hüseynli</p>
+                    <span class="position">Web Developer</span>
+                  </div>
+                </div>
+              </div>
+              <div class="item">
+                <div class="testimony-wrap rounded text-center py-4 pb-5">
+                  <div class="user-img mb-2" style="background-image: url(/static/images/master.jpg)">
+                  </div>
+                  <div class="text pt-4">
+                    <p class="mb-4"></p>
+                    <p class="name">Natiq Kərimov</p>
+                    <span class="position">Operator</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <section class="ftco-counter ftco-section img bg-light" id="section-counter">
+			<div class="overlay"></div>
+    	<div class="container">
+    		<div class="row">
+          <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
+            <div class="block-18">
+              <div class="text text-border d-flex align-items-center">
+                <strong class="number" data-number="20">0</strong>
+                <span>İllik <br>Təcrübə</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
+            <div class="block-18">
+              <div class="text text-border d-flex align-items-center">
+                <strong class="number" data-number="70">0</strong>
+                <span>Ümumi <br>Avtomobillər</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
+            <div class="block-18">
+              <div class="text text-border d-flex align-items-center">
+                <strong class="number" data-number="2590">0</strong>
+                <span>Xoşbəxt <br>Müştərilər</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
+            <div class="block-18">
+              <div class="text d-flex align-items-center">
+                <strong class="number" data-number="53">0</strong>
+                <span>Bölgəyə <br>Səfərlərin təşkili</span>
+              </div>
+            </div>
+          </div>
+        </div>
+    	</div>
+    </section>	
+
+
+
+
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+
+
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
