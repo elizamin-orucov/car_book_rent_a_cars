@@ -28,10 +28,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # project apps
     'Cars', 'users',
 
-    # install apps
+    # third-party apps
     'ckeditor', 'mptt',
     'django_cleanup.apps.CleanupConfig',
     "phonenumber_field",
@@ -153,8 +154,8 @@ if DEBUG:
 else:
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     EMAIL_HOST = "smtp.gmail.com"
-    EMAIL_HOST_USER = 'car.book.rent.a.car@gmail.com'
-    EMAIL_HOST_PASSWORD = '**********'
+    EMAIL_HOST_USER = ''  # email address
+    EMAIL_HOST_PASSWORD = ''  # email password
     EMAIL_PORT = 465
     EMAIL_USE_TLS = False
     EMAIL_USE_SSL = True
